@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using BidSystem.Models;
 using Microsoft.AspNetCore.Mvc;
+using BidSystem.Models.ViewModel;
 
 namespace BidSystem.Controllers
 {

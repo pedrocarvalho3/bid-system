@@ -1,6 +1,14 @@
-﻿namespace BidSystem.Models.Enums
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BidSystem.Models.Enums
 {
-	public class StockMovementType
+	public enum StockMovementType
 	{
+		[Display(Name = "Entrada")]
+		Prohibited = 0,
+		[Display(Name = "Danificado")]
+		Damaged = 1,
+		[Display(Name = "Envio")]
+		Shipped = 2,
 	}
 }
