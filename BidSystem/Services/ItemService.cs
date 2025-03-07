@@ -1,6 +1,8 @@
 ﻿using BidSystem.Data;
 using BidSystem.Models;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Plugins;
+using System.Data;
 
 namespace BidSystem.Services
 {
@@ -16,6 +18,52 @@ namespace BidSystem.Services
 		public async Task<List<Item>> FindAllAsync()
 		{
 			return await _context.Item.ToListAsync();
+		}
+
+		public async Task InsertAsync(Item item)
+		{
+			_context.Item.Add(item);
+			await _context.SaveChangesAsync();
+		}
+
+		public async Task<Item> FindByIdAsync(int id)
+		{
+			return await _context.Item.FirstOrDefaultAsync(i => i.Id == id);
+		}
+
+		public async Task RemoveAsync(int id)
+		{
+			try
+			{
+				var obj = await _context.Item.FindAsync(id);
+				_context.Item.Remove(obj);
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateException e)
+			{
+				throw new Exception("Can't delete seller because he/she has sales");
+			}
+		}
+
+		public async Task UpdateAsync(Item obj)
+		{
+			var existingItem = await _context.Item.FindAsync(obj.Id);
+			if (existingItem == null)
+			{
+				throw new Exception("Id not found");
+			}
+
+			try
+			{
+				obj.Quantity = existingItem.Quantity;
+
+				_context.Entry(existingItem).CurrentValues.SetValues(obj);
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException e)
+			{
+				throw new Exception(e.Message);
+			}
 		}
 
 		public async Task UpdateStockAsync(int itemId, int quantity, bool isEntry)

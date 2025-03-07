@@ -18,12 +18,17 @@ namespace BidSystem.Services
 
 		public async Task<List<StockMovement>> FindAllAsync()
 		{
-			return await _context.StockMovement.ToListAsync();
+			return await _context.StockMovement.Include(x => x.Item).ToListAsync();
 		}
 		public async Task InsertAsync(StockMovement obj)
 		{
 			_context.Add(obj);
 			await _context.SaveChangesAsync();
+		}
+
+		public async Task<StockMovement> FindByIdAsync(int id)
+		{
+			return await _context.StockMovement.FirstOrDefaultAsync(i => i.Id == id);
 		}
 	}
 }

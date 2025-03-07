@@ -24,6 +24,22 @@ namespace BidSystem.Controllers
 			return View(list);
 		}
 
+		public async Task<IActionResult> Details(int? id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
+
+			var stockMovement = await _stockMovementService.FindByIdAsync(id.Value);
+			if (stockMovement == null)
+			{
+				return NotFound();
+			}
+
+			return View(stockMovement);
+		}
+
 		public async Task<IActionResult> Create()
 		{
 			var items = await _itemService.FindAllAsync();
