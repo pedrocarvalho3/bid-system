@@ -11,11 +11,11 @@ using BidSystem.Services;
 
 namespace BidSystem.Controllers
 {
-    public class StockItemsController : Controller
+    public class ItemsController : Controller
     {
-        private readonly StockItemService _stockItemService;
+        private readonly ItemService _stockItemService;
 
-        public StockItemsController(StockItemService stockItemService)
+        public ItemsController(ItemService stockItemService)
         {
             _stockItemService = stockItemService;
         }

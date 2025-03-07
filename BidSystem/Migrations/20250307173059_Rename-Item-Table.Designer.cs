@@ -4,6 +4,7 @@ using BidSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BidSystem.Migrations
 {
     [DbContext(typeof(BidSystemContext))]
-    partial class BidSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20250307173059_Rename-Item-Table")]
+    partial class RenameItemTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,13 +62,13 @@ namespace BidSystem.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StockItemId")
                         .HasColumnType("int");
 
                     b.Property<int>("Type")
@@ -73,20 +76,20 @@ namespace BidSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("StockItemId");
 
                     b.ToTable("StockMovement");
                 });
 
             modelBuilder.Entity("BidSystem.Models.StockMovement", b =>
                 {
-                    b.HasOne("BidSystem.Models.Item", "Item")
+                    b.HasOne("BidSystem.Models.Item", "StockItem")
                         .WithMany()
-                        .HasForeignKey("ItemId")
+                        .HasForeignKey("StockItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Item");
+                    b.Navigation("StockItem");
                 });
 #pragma warning restore 612, 618
         }

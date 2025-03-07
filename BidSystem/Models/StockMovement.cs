@@ -18,12 +18,12 @@ namespace BidSystem.Models
 		[DataType(DataType.Date)]
 		[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
 		public DateTime Date { get; set; } = DateTime.Now;
-		[Display(Name = "Descrição")]
+		[Display(Name = "Notas")]
 		public string? Notes { get; set; }
 		[Required]
 		[Display(Name = "Código do Item")]
-		public int StockItemId { get; set; }
-		public StockItem StockItem { get; set; }
+		public int ItemId { get; set; }
+		public Item Item { get; set; }
 
 		public StockMovement()
 		{
@@ -32,7 +32,7 @@ namespace BidSystem.Models
 
 		public StockMovement(int itemId, int quantity, StockMovementType type, DateTime date, string? notes)
 		{
-			StockItemId = itemId;
+			ItemId = itemId;
 			Quantity = quantity;
 			Type = type;
 			Date = date;
@@ -42,7 +42,7 @@ namespace BidSystem.Models
 		public StockMovement(int id, int itemId, int quantity, StockMovementType type, DateTime date, string? notes)
 		{
 			Id = id;
-			StockItemId = itemId;
+			ItemId = itemId;
 			Quantity = quantity;
 			Type = type;
 			Date = date;

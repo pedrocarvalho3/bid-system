@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BidSystem.Models
 {
-	public class StockItem
+	public class Item
 	{
 		[Key]
 		public int Id { get; set; }
@@ -15,11 +15,11 @@ namespace BidSystem.Models
 		public decimal Price { get; set; }
 		public string? Description { get; set; }
 
-		public StockItem()
+		public Item()
 		{
 		}
 
-		public StockItem(string name, int quantity, decimal price, string? description, int stockMovementId)
+		public Item(string name, int quantity, decimal price, string? description, int stockMovementId)
 		{
 			Name = name;
 			Quantity = quantity;
@@ -27,7 +27,7 @@ namespace BidSystem.Models
 			Description = description;
 		}
 
-		public StockItem(int id, string name, int quantity, decimal price, string? description, int stockMovementId)
+		public Item(int id, string name, int quantity, decimal price, string? description, int stockMovementId)
 		{
 			Id = id;
 			Name = name;

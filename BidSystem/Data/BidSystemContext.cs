@@ -10,7 +10,7 @@ namespace BidSystem.Data
         {
         }
 
-        public DbSet<StockItem> StockItem { get; set; } = default!;
+        public DbSet<Item> Item { get; set; } = default!;
 		public DbSet<StockMovement> StockMovement { get; set; } = default!;
 	}
 }

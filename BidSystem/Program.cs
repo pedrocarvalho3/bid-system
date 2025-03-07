@@ -10,7 +10,7 @@ builder.Services.AddDbContext<BidSystemContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<StockItemService>();
+builder.Services.AddScoped<ItemService>();
 builder.Services.AddScoped<StockMovementService>();
 builder.Services.AddScoped<SeedingService>();
 
