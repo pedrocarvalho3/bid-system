@@ -1,5 +1,6 @@
 ﻿using BidSystem.Data;
 using BidSystem.Models;
+using BidSystem.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Plugins;
 using System.Data;
@@ -41,7 +42,7 @@ namespace BidSystem.Services
 			}
 			catch (DbUpdateException e)
 			{
-				throw new Exception("Can't delete seller because he/she has sales");
+				throw new IntegrityException("Can't delete seller because he/she has sales");
 			}
 		}
 
@@ -50,7 +51,7 @@ namespace BidSystem.Services
 			var existingItem = await _context.Item.FindAsync(obj.Id);
 			if (existingItem == null)
 			{
-				throw new Exception("Id not found");
+				throw new NotFoundException("Id not found");
 			}
 
 			try
@@ -62,7 +63,7 @@ namespace BidSystem.Services
 			}
 			catch (DbUpdateConcurrencyException e)
 			{
-				throw new Exception(e.Message);
+				throw new DbConcurrencyException(e.Message);
 			}
 		}
 

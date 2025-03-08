@@ -22,6 +22,8 @@ namespace BidSystem.Services
 		}
 		public async Task InsertAsync(StockMovement obj)
 		{
+			bool isEntry = obj.Type == StockMovementType.Prohibited;
+			await _itemService.UpdateStockAsync(obj.ItemId, obj.Quantity, isEntry);
 			_context.Add(obj);
 			await _context.SaveChangesAsync();
 		}

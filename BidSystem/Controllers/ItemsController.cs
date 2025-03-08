@@ -2,6 +2,8 @@
 using BidSystem.Models;
 using BidSystem.Services;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using BidSystem.Models.ViewModel;
+using System.Diagnostics;
 
 namespace BidSystem.Controllers
 {
@@ -19,42 +21,21 @@ namespace BidSystem.Controllers
 			return View(list);
 		}
 
-		// GET: Items/Details/5
-		public async Task<IActionResult> Details(int? id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
-
-			var item = await _itemService.FindByIdAsync(id.Value);
-			if (item == null)
-			{
-				return NotFound();
-			}
-
-			return View(item);
-		}
-
-		// GET: Departments/Create
 		public IActionResult Create()
 		{
 			return View();
 		}
 
-		// POST: Departments/Create
-		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(Item item)
 		{
-			if (ModelState.IsValid)
-			{
-				await _itemService.InsertAsync(item);
-				return RedirectToAction(nameof(Index));
+			if (!ModelState.IsValid)
+			{	
+				return View(item);
 			}
-			return View(item);
+			await _itemService.InsertAsync(item);
+			return RedirectToAction(nameof(Index));
 		}
 
 		public async Task<IActionResult> Delete(int? id)
@@ -88,25 +69,37 @@ namespace BidSystem.Controllers
 			}
 		}
 
-		// GET: Departments/Edit/5
+		public async Task<IActionResult> Details(int? id)
+		{
+			if (id == null)
+			{
+				return RedirectToAction(nameof(Error), new { message = "Id not provided" });
+			}
+
+			var item = await _itemService.FindByIdAsync(id.Value);
+			if (item == null)
+			{
+				return RedirectToAction(nameof(Error), new { message = "Id not found" });
+			}
+
+			return View(item);
+		}
+
 		public async Task<IActionResult> Edit(int? id)
 		{
 			if (id == null)
 			{
-				return NotFound();
+				return RedirectToAction(nameof(Error), new { message = "Id not provided" });
 			}
 
-			var department = await _itemService.FindByIdAsync(id.Value);
-			if (department == null)
+			var item = await _itemService.FindByIdAsync(id.Value);
+			if (item == null)
 			{
-				return NotFound();
+				return RedirectToAction(nameof(Error), new { message = "Id not found" });
 			}
-			return View(department);
+			return View(item);
 		}
 
-		// POST: Departments/Edit/5
-		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, Item item)
@@ -130,38 +123,14 @@ namespace BidSystem.Controllers
 			}
 		}
 
-		// GET: Departments/Delete/5
-		/*public async Task<IActionResult> Delete(int? id)
+		public IActionResult Error(string message)
 		{
-			if (id == null)
+			var viewModel = new ErrorViewModel
 			{
-				return NotFound();
-			}
-
-			var department = await _context.Department
-				.FirstOrDefaultAsync(m => m.Id == id);
-			if (department == null)
-			{
-				return NotFound();
-			}
-
-			return View(department);
+				Message = message,
+				RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+			};
+			return View(viewModel);
 		}
-
-		// POST: Departments/Delete/5
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			var department = await _context.Department.FindAsync(id);
-			_context.Department.Remove(department);
-			await _context.SaveChangesAsync();
-			return RedirectToAction(nameof(Index));
-		}
-
-		private bool DepartmentExists(int id)
-		{
-			return _context.Department.Any(e => e.Id == id);
-		}*/
 	}
 }

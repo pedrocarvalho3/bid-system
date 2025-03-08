@@ -9,7 +9,7 @@
 <div class="row">
     <hr />
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post">
             <div class="form-group">
                 <label asp-for="StockMovement.Type" class="control-label"></label>
                 <select asp-for="StockMovement.Type" asp-items="Html.GetEnumSelectList<BidSystem.Models.Enums.StockMovementType>()" class="form-control">

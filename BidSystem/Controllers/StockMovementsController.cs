@@ -4,6 +4,7 @@ using BidSystem.Models.ViewModel;
 using BidSystem.Services;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Plugins;
+using System.Diagnostics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BidSystem.Controllers
@@ -24,22 +25,6 @@ namespace BidSystem.Controllers
 			return View(list);
 		}
 
-		public async Task<IActionResult> Details(int? id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
-
-			var stockMovement = await _stockMovementService.FindByIdAsync(id.Value);
-			if (stockMovement == null)
-			{
-				return NotFound();
-			}
-
-			return View(stockMovement);
-		}
-
 		public async Task<IActionResult> Create()
 		{
 			var items = await _itemService.FindAllAsync();
@@ -51,10 +36,33 @@ namespace BidSystem.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(StockMovement stockMovement)
 		{
-			bool isEntry = stockMovement.Type == StockMovementType.Prohibited;
-			await _itemService.UpdateStockAsync(stockMovement.ItemId, stockMovement.Quantity, isEntry);
 			await _stockMovementService.InsertAsync(stockMovement);
 			return RedirectToAction(nameof(Index));
+		}
+
+		public async Task<IActionResult> Details(int? id)
+		{
+			if (id == null)
+			{
+				return RedirectToAction(nameof(Error), new { message = "Id not provided" });
+			}
+
+			var stockMovement = await _stockMovementService.FindByIdAsync(id.Value);
+			if (stockMovement == null)
+			{
+				return RedirectToAction(nameof(Error), new { message = "Id not found" });
+			}
+
+			return View(stockMovement);
+		}
+		public IActionResult Error(string message)
+		{
+			var viewModel = new ErrorViewModel
+			{
+				Message = message,
+				RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+			};
+			return View(viewModel);
 		}
 	}
 }
